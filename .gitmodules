@@ -1,0 +1,3 @@
+[submodule "nonparametrics-class"]
+	path = machine-learning-theory
+	url = https://github.com/davidahirshberg/nonparametrics-class.git

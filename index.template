@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Basic Page Needs
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta charset="utf-8">
+<title>Machine Learning Theory</title>
+<meta name="class page" content="">
+<meta name="Machine Learning Theory" content="">
+<meta name="robots" content="noindex">
+
+<!-- Mobile Specific Metas
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- FONT
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+<!-- CSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+
+<!-- Favicon
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<div class="container">
+
+<h3> What This Is </h3>
+<p>
+These are materials for a class on machine learning theory intended to be accessible to undergraduates
+with some amount of mathematical maturity but little or no background in common. At the moment, some parts 
+work better than others. I'm working on it. 
+</p>
+<p>
+The organization below is new. It's what I'm planning to use the next time I teach the class. 
+That means the lectures and homeworks are not in listed in the order they were presented in the past,
+so Lecture x might say 'Remember this from Lecture x+10' and so on. To see what the intended order is,
+take a look at <a href="https://davidahirshberg.bitbucket.io/teaching/nonparametrics/spring2024/syllabus.html">the syllabus</a>
+from the last time I taught the class. Some stuff is also a bit broken, where I began revising it and stopped.
+And there is a major element of the class that's missing: labs. I'll try to get all this fixed soon.
+</p>
+<p>
+If you want access to the rest of the stuff (labs, homework solutions, etc.) or the Sweave code I use to generate it all, feel free to email me at [first name][middle initial][last name]@emory.edu. 
+And if you're interested in collaborating on or forking this project, let's talk. 
+</p>
+
+
+<h3> Course Materials </h3>
+
+{{#each units}}
+  <div class="row">
+  <h4>Part {{@index}}: {{this.unit}}</h4>
+  <h5>Lectures</h5>
+  <ul>
+  {{#each this.lectures}}
+  <li><a href="{{this.url}}">{{this.name}}</a></li>
+  {{/each}}
+  </ul>
+  <h5>Homework</h5>
+  <ul>
+  {{#each this.homework}}
+  <li><a href="{{this.url}}">{{this.name}}</a></li>
+  {{/each}}
+  </ul>
+  </div>
+{{/each}}
+
+</div>
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

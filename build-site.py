@@ -23,6 +23,26 @@ def lecture(name):
 def homework(name):
   return rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))
 
+def lab(name):
+  nbname = name + '-lab.ipynb'
+  output_path = (ASSETS_PATH / 'labs' / nbname).relative_to('_site')
+  parent = Path('machine-learning-theory') / 'labs'
+  
+  if (output_path.exists() and output_path.stat().st_mtime > (parent / nbname).stat().st_mtime):
+    return {'notebook': output_path, 'html': output_path.with_suffix('.html') }
+  
+  labs_relative = Path('..') / '..' / ASSETS_PATH / 'labs'
+  nboutput=subprocess.run(['jupyter', 'nbconvert', '--clear-output', '--to', 'notebook', nbname, 
+                           f'--output-dir={labs_relative}', 
+		                      '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
+  htmloutput=subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--execute', nbname, 
+                           f'--output-dir={labs_relative}', 
+                          '--Highlight2HTML.extra_formatter_options', 'linenos=table',
+		                      '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
+  
+  return {'notebook': output_path, 'html': output_path.with_suffix('.html') }
+
+
 # Materials
 units = [
   {
@@ -39,6 +59,9 @@ units = [
       { 'name': 'Convex Regression', 'url': homework('convex-regression') },
       { 'name': 'Lipschitz Regression', 'url': homework('smoothness') },
       { 'name': 'Polynomial Regression and the Gaussian Sobolev Model', 'url': homework('gaussian-sobolev-model') }
+    ],
+    'labs': [
+      { 'name': 'Bounded Variation Regression', 'urls': lab('bounded-variation') }
     ]
   },{ 
     'unit': 'Simplified Least Squares Theory',

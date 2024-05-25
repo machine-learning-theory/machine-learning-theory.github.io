@@ -64,6 +64,18 @@ And if you're interested in collaborating on or forking this project, let's talk
   <li><a href="{{this.url}}">{{this.name}}</a></li>
   {{/each}}
   </ul>
+  {{#if this.labs}}
+  <h5>Labs</h5>
+  <table class="u-full-width"><tbody>
+  {{#each this.labs}}
+  <tr>
+    <td>{{this.name}}</td> 
+    <td><a href="{{this.urls.html}}">[view]</a></td>  
+    <td><a href="{{this.urls.notebook}}">[notebook]</a></td> 
+  </tr> 
+  {{/each}}
+  </tbody></table>
+  {{/if}}
   <h5>Homework</h5>
   <ul>
   {{#each this.homework}}

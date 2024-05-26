@@ -56,11 +56,14 @@ units = [
     ],
     'homework': [
       { 'name': 'Vector Spaces', 'url': homework('vector-spaces') },
-      { 'name': 'Convex Regression', 'url': homework('convex-regression') },
+      # not really good enough at the moment 
+      # { 'name': 'Convex Regression', 'url': homework('convex-regression') }, 
       { 'name': 'Lipschitz Regression', 'url': homework('smoothness') },
-      { 'name': 'Polynomial Regression and the Gaussian Sobolev Model', 'url': homework('gaussian-sobolev-model') }
+      { 'name': 'Inner Product Spaces', 'url': homework('inner-product-spaces') },
+      { 'name': 'Sobolev Models', 'url': homework('sobolev-models') }
     ],
     'labs': [
+      { 'name': 'Monotone Regression',          'urls': lab('monotone') },
       { 'name': 'Bounded Variation Regression', 'urls': lab('bounded-variation') }
     ]
   },{ 
@@ -74,7 +77,7 @@ units = [
     'homework': [
       {'name': 'Subgaussianity and Maximal Inequalities', 'url': homework('tail-bounds')},
       {'name': 'Calculating Gaussian Width', 'url': homework('gaussian-width')},
-      {'name': 'The Gaussian Width of Sobolev Models', 'url': homework('sobolev-models')},
+      {'name': 'The Gaussian Width of Sobolev Models', 'url': homework('width-of-sobolev-models')},
       {'name': 'Covering Numbers for Monotone and BV Regression Models', 'url': homework('covering-numbers')} 
     ]
   },{ 

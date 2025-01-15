@@ -87,10 +87,10 @@ activities = [
   
   lecture('multivariate-sobolev', 'Multivariate Sobolev Regression'),
   lab('image-denoising',          'Image Denoising'),
-  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e., Model Selection (1/2)'),
-  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e., Model Selection (2/2)'),
+  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (1/2)'),
+  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (2/2)'),
   lab('model-selection', 'Understanding Model Selection'),
-  lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e., Regression'),
+  lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e. Regression, with Gaussian Noise'),
   lab('drawing-width',   'Drawing Gaussian Width'),
   lab('computing-width', 'Computing Gaussian Width'),
 
@@ -98,8 +98,8 @@ activities = [
   lecture('covering-numbers', 'Bounding Gaussian Width using Covering Numbers'),
   lecture('chaining',         'Bounding Gaussian Width using Chaining'),
   lecture('curse',            'The Curse of Dimensionality'),
-  lecture('non-gaussian',     'Non-Gaussian Noise'),
-  lecture('sampling',         'Sampling and Population MSE'),
+  lecture('non-gaussian',     'Least Squares and non-Gaussian Noise'),
+  lecture('sampling',         'Least Squares, Sampling, and Population MSE'),
   review()
 ]
 

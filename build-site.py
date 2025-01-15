@@ -22,8 +22,8 @@ def lecture(name, title):
 def homework(name, title):
   return {'type': 'homework', 'title': title, 'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))}
 
-def review():
-  return {'type': 'review'}
+def review(title=""):
+  return {'type': 'review', 'title': title}
 
 
 def lab(name, title, warmup=None, displaytype='Lab'):
@@ -89,18 +89,17 @@ activities = [
   lab('image-denoising',          'Image Denoising'),
   lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (1/2)'),
   lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (2/2)'),
-  lab('model-selection', 'Understanding Model Selection'),
   lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e. Regression, with Gaussian Noise'),
+  review('+ Misspecification'),
   lab('drawing-width',   'Drawing Gaussian Width'),
   lab('computing-width', 'Computing Gaussian Width'),
 
-  review(),
   lecture('covering-numbers', 'Bounding Gaussian Width using Covering Numbers'),
   lecture('chaining',         'Bounding Gaussian Width using Chaining'),
   lecture('curse',            'The Curse of Dimensionality'),
+  review(),
   lecture('non-gaussian',     'Least Squares and non-Gaussian Noise'),
   lecture('sampling',         'Least Squares, Sampling, and Population MSE'),
-  review()
 ]
 
 def censor(day, activity):

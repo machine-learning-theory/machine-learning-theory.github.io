@@ -1,5 +1,4 @@
 from pathlib import Path
-from pybars import Compiler
 import math
 import subprocess
 import yaml
@@ -12,92 +11,113 @@ def rendered(path, dash_whatever=''):
   print(f"rendering {rendered_path.name}")
   output=subprocess.run(['latexmk', path.name], cwd=path.parent)
   if output.returncode:
-    return (ASSETS_PATH / 'does-not-compile.html').relative_to('_site')
+    return None # (ASSETS_PATH / 'does-not-compile.html').relative_to('_site')
   else:
     path.with_suffix('.pdf').rename(rendered_path)
     return rendered_path.relative_to('_site')
 
-def lecture(name):
-  return rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw'))
+def lecture(name, title):
+  return {'type': 'lecture',  'title': title, 'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw'))}
 
-def homework(name):
-  return rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))
+def homework(name, title):
+  return {'type': 'homework', 'title': title, 'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))}
 
-def lab(name):
+def review():
+  return {'type': 'review'}
+
+
+def lab(name, title, warmup=None, displaytype='Lab'):
   nbname = name + '-lab.ipynb'
-  output_path = (ASSETS_PATH / 'labs' / nbname).relative_to('_site')
+  output_path = ASSETS_PATH / 'labs' / nbname
   parent = Path('machine-learning-theory') / 'labs'
   
-  if (output_path.exists() and output_path.stat().st_mtime > (parent / nbname).stat().st_mtime):
-    return {'notebook': output_path, 'html': output_path.with_suffix('.html') }
+  if not (output_path.exists() and output_path.stat().st_mtime > (parent / nbname).stat().st_mtime):
+    nboutput=subprocess.run(['jupyter', 'nbconvert', '--clear-output', '--to', 'notebook', nbname,  
+                           '--output',  output_path.resolve().with_suffix(''), 
+		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
+    htmloutput=None and subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--template', 'classic', '--embed-images', nbname, 
+                           '--output',  output_path.resolve().with_suffix(''), 
+                           '--Highlight2HTML.extra_formatter_options', 'linenos=table',
+		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
   
-  labs_relative = Path('..') / '..' / ASSETS_PATH / 'labs'
-  nboutput=subprocess.run(['jupyter', 'nbconvert', '--clear-output', '--to', 'notebook', nbname, 
-                           f'--output-dir={labs_relative}', 
-		                      '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
-  htmloutput=subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--execute', nbname, 
-                           f'--output-dir={labs_relative}', 
-                          '--Highlight2HTML.extra_formatter_options', 'linenos=table',
-		                      '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
-  
-  return {'notebook': output_path, 'html': output_path.with_suffix('.html') }
+  def rel_or_none(path): return path.relative_to('_site') if path.exists() else None
+  return {'type': 'lab', 'displaytype': displaytype, 'title': title, 
+          'notebook': rel_or_none(output_path), 
+          'html':     rel_or_none(output_path.with_suffix('.html')), 'warmup': warmup }
+
+def dayoff(title):
+  return {'type': 'dayoff', 'title': title}
+
+# Describe the Syllabus
+
+from datetime import date, datetime
+from dateutil.rrule import rrule, WEEKLY, SU, TU, TH
+from dateutil.relativedelta import relativedelta
+def sunday_of_week(day): 
+  return day + relativedelta(weekday=SU(-1))
+def group_by_week(days):
+  sundays = { sunday_of_week(day) for day in days }
+  return [ [{'date': day.strftime("%a, %b %d")} | activity for day,activity in sorted(days.items()) if sunday_of_week(day) == sunday]  for sunday in sorted(sundays) ]
 
 
-# Materials
-units = [
-  {
-    'unit': 'Fitting Regression Models',
-    'lectures': [ 
-      { 'name': 'Introduction', 'url': lecture('intro') },
-      { 'name': 'Bounded Variation Regression', 'url': lecture('bounded-variation') },
-      { 'name': 'Treatment Effects and the R-Learner', 'url': lecture('r-learner') },
-      { 'name': 'Sobolev Regression', 'url': lecture('sobolev-regression') },
-      { 'name': 'Multivariate Sobolev Regression', 'url': lecture('isotropic-sobolev') }
-    ],
-    'homework': [
-      { 'name': 'Vector Spaces', 'url': homework('vector-spaces') },
-      # not really good enough at the moment 
-      # { 'name': 'Convex Regression', 'url': homework('convex-regression') }, 
-      { 'name': 'Lipschitz Regression', 'url': homework('smoothness') },
-      { 'name': 'Inner Product Spaces', 'url': homework('inner-product-spaces') },
-      { 'name': 'Sobolev Models', 'url': homework('sobolev-models') }
-    ],
-    'labs': [
-      { 'name': 'Monotone Regression',          'urls': lab('monotone') },
-      { 'name': 'Bounded Variation Regression', 'urls': lab('bounded-variation') }
-    ]
-  },{ 
-    'unit': 'Simplified Least Squares Theory',
-    'lectures': [
-      { 'name': 'Least Squares in Finite Models', 'url': lecture('least-squares-finite-models') },
-      { 'name': 'Least Squares in Infinite Models', 'url': lecture('least-squares-infinite-models') },
-      { 'name': 'Bounding Gaussian Width using Covering Numbers', 'url': lecture('covering-numbers') },
-      { 'name': 'Bounding Gaussian Width using Chaining', 'url': lecture('chaining') }
-    ],
-    'homework': [
-      {'name': 'Subgaussianity and Maximal Inequalities', 'url': homework('tail-bounds')},
-      {'name': 'Calculating Gaussian Width', 'url': homework('gaussian-width')},
-      {'name': 'The Gaussian Width of Sobolev Models', 'url': homework('width-of-sobolev-models')},
-      {'name': 'Covering Numbers for Monotone and BV Regression Models', 'url': homework('covering-numbers')} 
-    ]
-  },{ 
-    'unit': 'Broadening the Scope',
-    'lectures': [
-      {'name': 'Misspecification', 'url': lecture('least-squares-misspecified')},
-      {'name': 'Non-Gaussian Noise', 'url': lecture('least-squares-misspecified')},
-      {'name': 'Sampling and Population MSE', 'url': lecture('least-squares-population')}
-    ],
-    'homework': [
-      { 'name': 'Misspecification', 'url': homework('misspecification')},
-      { 'name': 'Comparing Gaussian and Non-Gaussian Noise', 'url': homework('width-comparison')}
-    ]
-   }
+startdate = date(2025, 1, 14)
+enddate = date(2025, 4, 25)
+daysoff = { 
+  datetime(2025, 3, 11): dayoff('Spring Break'),
+  datetime(2025, 3, 13): dayoff('Spring Break')
+}
+
+classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
+activities = [
+  lecture('intro', 'Introduction'),
+  lab('monotone', 'Implementing Monotone Regression (1/2)', warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warmup')),
+  lab('monotone', 'Implementing Monotone Regression (2/2)'),
+  lecture('bounded-variation', 'Bounded Variation Regression'),
+  lab('bounded-variation',     'Implementing Bounded Variation Regression'),
+  lab('convergence-rates',     'Rates of Convergence'),
+  lecture('r-learner',         'Treatment Effects and the R-Learner'),
+  lab('r-learner-parametric',    'The Parametric R-Learner'),
+  lab('r-learner-nonparametric', 'The Nonparametric R-Learner'), 
+  review(), 
+  
+  lecture('sobolev-regression', 'Sobolev Regression (1/2)'),
+  lecture('sobolev-regression', 'Sobolev Regression (2/2)'),
+  lab('sobolev-regression', 'Implementing Sobolev Regression'),
+  review(), 
+  
+  lecture('multivariate-sobolev', 'Multivariate Sobolev Regression'),
+  lab('image-denoising',          'Image Denoising'),
+  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e., Model Selection (1/2)'),
+  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e., Model Selection (2/2)'),
+  lab('model-selection', 'Understanding Model Selection'),
+  lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e., Regression'),
+  lab('drawing-width',   'Drawing Gaussian Width'),
+  lab('computing-width', 'Computing Gaussian Width'),
+
+  review(),
+  lecture('covering-numbers', 'Bounding Gaussian Width using Covering Numbers'),
+  lecture('chaining',         'Bounding Gaussian Width using Chaining'),
+  lecture('curse',            'The Curse of Dimensionality'),
+  lecture('non-gaussian',     'Non-Gaussian Noise'),
+  lecture('sampling',         'Sampling and Population MSE'),
+  review()
 ]
 
+def censor(day, activity):
+  if day >= datetime.now():
+    return activity | {'href': None, 'notebook': None, 'html': None}
+  else:
+    return activity
+
+days = daysoff | { day: censor(day,activity) for day, activity in zip(classdays, activities) }
+
+weeks = group_by_week(days)
 
 # Render the Index Page
+from pybars import Compiler
+
 compiler = Compiler()
-source = open("index.template", "r").read()
-template = compiler.compile(source)
-output = template( {'units': units } )
+template = compiler.compile(open("templates/spring25.mustache", "r").read())
+partials = {x : compiler.compile(open(f"templates/{x}.mustache", "r").read()) for x in ['lecture', 'lab', 'review', 'dayoff', 'notebook']}
+output = template( {'weeks' : weeks }, partials=partials)
 open('_site/index.html', 'w').write(output)

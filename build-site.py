@@ -19,8 +19,10 @@ def rendered(path, dash_whatever=''):
 def lecture(name, title):
   return {'type': 'lecture',  'title': title, 'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw'))}
 
-def homework(name, title):
-  return {'type': 'homework', 'title': title, 'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))}
+def homework(name, title, due):
+  return {'type': 'homework', 'title': title, 
+          'due':  due.strftime("%a, %b %d"),
+          'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))}
 
 def review(title=""):
   return {'type': 'review', 'title': title}
@@ -101,7 +103,13 @@ activities = [
   lecture('non-gaussian',     'Least Squares and non-Gaussian Noise'),
   lecture('sampling',         'Least Squares, Sampling, and Population MSE'),
 ]
-
+homeworks = {
+  0: [homework('vector-spaces', 'Vector Spaces',                   due=datetime(2025, 1, 23))],
+  1: [homework('inner-product-spaces', 'Inner Product Spaces',     due=datetime(2025, 1, 30))],
+  2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 6)),
+      homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 6))],
+}
+    
 def censor(day, activity):
   if day >= datetime.now():
     return activity | {'href': None, 'notebook': None, 'html': None}
@@ -111,12 +119,15 @@ def censor(day, activity):
 days = daysoff | { day: censor(day,activity) for day, activity in zip(classdays, activities) }
 
 weeks = group_by_week(days)
+for week, options in homeworks.items():
+  for assignment in options:
+    weeks[week].append( assignment ) 
 
 # Render the Index Page
 from pybars import Compiler
 
 compiler = Compiler()
 template = compiler.compile(open("templates/spring25.mustache", "r").read())
-partials = {x : compiler.compile(open(f"templates/{x}.mustache", "r").read()) for x in ['lecture', 'lab', 'review', 'dayoff', 'notebook']}
+partials = {x : compiler.compile(open(f"templates/{x}.mustache", "r").read()) for x in ['lecture', 'homework', 'lab', 'review', 'dayoff', 'notebook']}
 output = template( {'weeks' : weeks }, partials=partials)
 open('_site/index.html', 'w').write(output)

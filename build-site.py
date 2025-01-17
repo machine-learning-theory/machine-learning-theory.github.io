@@ -55,8 +55,10 @@ def dayoff(title):
 from datetime import date, datetime
 from dateutil.rrule import rrule, WEEKLY, SU, TU, TH
 from dateutil.relativedelta import relativedelta
+
 def sunday_of_week(day): 
   return day + relativedelta(weekday=SU(-1))
+
 def group_by_week(days):
   sundays = { sunday_of_week(day) for day in days }
   return [ [{'date': day.strftime("%a, %b %d")} | activity for day,activity in sorted(days.items()) if sunday_of_week(day) == sunday]  for sunday in sorted(sundays) ]

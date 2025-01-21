@@ -28,7 +28,7 @@ def review(title=""):
   return {'type': 'review', 'title': title}
 
 
-def lab(name, title, warmup=None, displaytype='Lab'):
+def lab(name, title, warmup=None, followup=None, displaytype='Lab'):
   nbname = name + '-lab.ipynb'
   output_path = ASSETS_PATH / 'labs' / nbname
   parent = Path('machine-learning-theory') / 'labs'
@@ -45,7 +45,10 @@ def lab(name, title, warmup=None, displaytype='Lab'):
   def rel_or_none(path): return path.relative_to('_site') if path.exists() else None
   return {'type': 'lab', 'displaytype': displaytype, 'title': title, 
           'notebook': rel_or_none(output_path), 
-          'html':     rel_or_none(output_path.with_suffix('.html')), 'warmup': warmup }
+          'html':     rel_or_none(output_path.with_suffix('.html')), 
+          'warmup': warmup, 
+          'followup': followup }
+  
 
 def dayoff(title):
   return {'type': 'dayoff', 'title': title}
@@ -74,8 +77,8 @@ daysoff = {
 classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
 activities = [
   lecture('intro', 'Introduction'),
-  lab('monotone', 'Implementing Monotone Regression (1/2)', warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warmup')),
-  lab('monotone', 'Implementing Monotone Regression (2/2)'),
+  lab('monotone', 'Implementing Monotone Regression (1/2)', warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warm Up')),
+  lab('monotone', 'Implementing Monotone Regression (2/2)', followup=lab('image-denoising',     'Image Denoising',       displaytype='Follow Up')),
   lecture('bounded-variation', 'Bounded Variation Regression'),
   lab('bounded-variation',     'Implementing Bounded Variation Regression'),
   lab('convergence-rates',     'Rates of Convergence'),
@@ -108,12 +111,12 @@ activities = [
 homeworks = {
   0: [homework('vector-spaces', 'Vector Spaces',                   due=datetime(2025, 1, 23))],
   1: [homework('inner-product-spaces', 'Inner Product Spaces',     due=datetime(2025, 1, 30))],
-  2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 6)),
-      homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 6))],
+  #2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 6)),
+  #    homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 6))],
 }
     
 def censor(day, activity):
-  if day >= datetime.now():
+  if day >= sunday_of_week(datetime.now()) + relativedelta(weeks=1):
     return activity | {'href': None, 'notebook': None, 'html': None}
   else:
     return activity

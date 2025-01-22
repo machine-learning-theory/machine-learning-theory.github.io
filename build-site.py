@@ -7,7 +7,7 @@ ASSETS_PATH = Path('_site/assets')
 def exists_newer(maybe_newer_path, old_path):
   return maybe_newer_path.exists() and maybe_newer_path.stat().st_mtime > old_path.stat().st_mtime
 
-def rendered(path, dash_whatever=''):
+def rendered(path, dash_whatever='', solution=False):
   rendered_path = (ASSETS_PATH / path.relative_to('machine-learning-theory').parent / (path.with_suffix('').name + dash_whatever)).with_suffix('.pdf') 
   
   if not path.exists():
@@ -17,9 +17,12 @@ def rendered(path, dash_whatever=''):
     return rendered_path.relative_to('_site')
 
   print(f"rendering {rendered_path.name}")
-  output=subprocess.run(['latexmk', path.name], cwd=path.parent)
-  if output.returncode:
-    return None # (ASSETS_PATH / 'does-not-compile.html').relative_to('_site')
+  preamble = 'solution-preamble.tex' if solution else 'assignment-preamble.tex'
+  subprocess.run(['ln', '-sf', preamble, 'preamble.tex'], cwd=path.parent)
+  output=subprocess.run(['latexmk', path.name, '-auxdir=aux'], cwd=path.parent)
+  if output.returncode: 
+    print(f"latexmk failed for {path.name}")
+    return None 
   else:
     path.with_suffix('.pdf').rename(rendered_path)
     return rendered_path.relative_to('_site')
@@ -28,9 +31,15 @@ def lecture(name, title):
   return {'type': 'lecture',  'title': title, 'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw'))}
 
 def homework(name, title, due):
-  return {'type': 'homework', 'title': title, 
+  assignment = {'type': 'homework', 'title': title, 
           'due':  due.strftime("%a, %b %d"),
-          'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'))}
+          'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw')) }
+
+  duetime = due.replace(hour=23, minute=59)
+  if datetime.now() > duetime:
+    assignment['solution-href'] = rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw'), dash_whatever='-solution', solution=True)
+    
+  return assignment
 
 def review(title=""):
   return {'type': 'review', 'title': title}

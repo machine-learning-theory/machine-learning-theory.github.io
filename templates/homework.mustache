@@ -2,9 +2,13 @@
   <td>Homework</td>
   <td></td>
   {{#if href}}
-  <td><a href="{{href}}">{{title}}</a></td>
+    {{#if solution-href}}
+    <td><a href="{{href}}">{{title}}</a> <a href="{{solution-href}}">[solution]</a></td>
+    {{else}}
+    <td><a href="{{href}}">{{title}}</a></td>
+    {{/if}}
   {{else}}
-  <td>{{title}}</td>
+    <td>{{title}}</td>
   {{/if}}
   <td>
     Due {{due}} at 11:59pm

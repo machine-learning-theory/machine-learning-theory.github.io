@@ -4,10 +4,18 @@ import subprocess
 import yaml
 
 ASSETS_PATH = Path('_site/assets')
+def exists_newer(maybe_newer_path, old_path):
+  return maybe_newer_path.exists() and maybe_newer_path.stat().st_mtime > old_path.stat().st_mtime
+
 def rendered(path, dash_whatever=''):
   rendered_path = (ASSETS_PATH / path.relative_to('machine-learning-theory').parent / (path.with_suffix('').name + dash_whatever)).with_suffix('.pdf') 
-  if (rendered_path.exists() and rendered_path.stat().st_mtime > path.stat().st_mtime):
+  
+  if not path.exists():
+    print(f"skipping {path.name} because it doesn't exist")
+    return None
+  if exists_newer(rendered_path, path):
     return rendered_path.relative_to('_site')
+
   print(f"rendering {rendered_path.name}")
   output=subprocess.run(['latexmk', path.name], cwd=path.parent)
   if output.returncode:
@@ -31,21 +39,37 @@ def review(title=""):
 def lab(name, title, warmup=None, followup=None, displaytype='Lab'):
   nbname = name + '-lab.ipynb'
   output_path = ASSETS_PATH / 'labs' / nbname
+  solution_output_path = ASSETS_PATH / 'labs' / (name + '-lab-solution.ipynb') 
   parent = Path('machine-learning-theory') / 'labs'
   
-  if not (output_path.exists() and output_path.stat().st_mtime > (parent / nbname).stat().st_mtime):
-    nboutput=subprocess.run(['jupyter', 'nbconvert', '--clear-output', '--to', 'notebook', nbname,  
-                           '--output',  output_path.resolve().with_suffix(''), 
-		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
-    htmloutput=None and subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--template', 'classic', '--embed-images', nbname, 
-                           '--output',  output_path.resolve().with_suffix(''), 
-                           '--Highlight2HTML.extra_formatter_options', 'linenos=table',
-		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', 'solution'], cwd=parent)
+  if not (parent / nbname).exists():
+    print(f"skipping {nbname} because it doesn't exist")
+    return {'type': 'lab', 'displaytype': displaytype, 'title': title } 
   
+  def renderlab(nbname, the_output_path, remove_tag, format):
+    if format == 'notebook':
+      nboutput=subprocess.run(['jupyter', 'nbconvert', '--clear-output', '--to', 'notebook', nbname,  
+                           '--output',  the_output_path.resolve().with_suffix(''), 
+		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', remove_tag], cwd=parent)
+    elif format == 'html':
+      htmloutput=None and subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--template', 'classic', '--embed-images', nbname, 
+                           '--output',  the_output_path.resolve().with_suffix(''), 
+                           '--Highlight2HTML.extra_formatter_options', 'linenos=table',
+		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', remove_tag], cwd=parent)
+  
+  if not exists_newer(output_path, parent / nbname): 
+    print(f"rendering {nbname}")
+    renderlab(nbname, output_path, remove_tag='solution', format='notebook') 
+  if not exists_newer(solution_output_path, parent / nbname):
+    print(f"rendering {nbname} solution")
+    renderlab(nbname, solution_output_path, remove_tag='solution-template', format='notebook')
+
   def rel_or_none(path): return path.relative_to('_site') if path.exists() else None
   return {'type': 'lab', 'displaytype': displaytype, 'title': title, 
           'notebook': rel_or_none(output_path), 
           'html':     rel_or_none(output_path.with_suffix('.html')), 
+          'solution-notebook': rel_or_none(solution_output_path),
+          'solution-html':     rel_or_none(solution_output_path.with_suffix('.html')),
           'warmup': warmup, 
           'followup': followup }
   
@@ -77,8 +101,8 @@ daysoff = {
 classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
 activities = [
   lecture('intro', 'Introduction'),
-  lab('monotone', 'Implementing Monotone Regression (1/2)', warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warm Up')),
-  lab('monotone', 'Implementing Monotone Regression (2/2)', followup=lab('image-denoising',     'Image Denoising',       displaytype='Follow Up')),
+  lab('monotone', 'Implementing Monotone Regression (1/2)',  warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warm Up')),
+  lab('monotone', 'Implementing Monotone Regression (2/2)',  followup=lab('image-denoising',     'Image Denoising',       displaytype='Follow Up')),
   lecture('bounded-variation', 'Bounded Variation Regression'),
   lab('bounded-variation',     'Implementing Bounded Variation Regression'),
   lab('convergence-rates',     'Rates of Convergence'),
@@ -116,9 +140,15 @@ homeworks = {
 }
     
 def censor(day, activity):
-  if day >= sunday_of_week(datetime.now()) + relativedelta(weeks=1):
-    return activity | {'href': None, 'notebook': None, 'html': None}
+  endofclass = day.replace(hour=16, minute=15)
+  if day >= sunday_of_week(datetime.now()) + relativedelta(weeks=1): 
+    # if day is next week or later (i.e. after next sunday), no links
+    return activity | {'href': None, 'notebook': None, 'html': None, 'solution-href': None, 'solution-notebook': None, 'solution-html': None}
+  elif endofclass >= datetime.now():
+    # if it's before end of class on day, no solution links
+    return activity | {'solution-href': None, 'solution-notebook': None, 'solution-html': None}
   else:
+    # if it's after end of class on day, show links
     return activity
 
 days = daysoff | { day: censor(day,activity) for day, activity in zip(classdays, activities) }
@@ -133,6 +163,6 @@ from pybars import Compiler
 
 compiler = Compiler()
 template = compiler.compile(open("templates/spring25.mustache", "r").read())
-partials = {x : compiler.compile(open(f"templates/{x}.mustache", "r").read()) for x in ['lecture', 'homework', 'lab', 'review', 'dayoff', 'notebook']}
+partials = {x : compiler.compile(open(f"templates/{x}.mustache", "r").read()) for x in ['lecture', 'homework', 'lab', 'review', 'dayoff', 'notebook', 'solution-notebook']}
 output = template( {'weeks' : weeks }, partials=partials)
 open('_site/index.html', 'w').write(output)

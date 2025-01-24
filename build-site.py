@@ -17,9 +17,11 @@ def rendered(path, dash_whatever='', solution=False):
     return rendered_path.relative_to('_site')
 
   print(f"rendering {rendered_path.name}")
-  preamble = 'solution-preamble.tex' if solution else 'assignment-preamble.tex'
-  subprocess.run(['ln', '-sf', preamble, 'preamble.tex'], cwd=path.parent)
+  if (path.parent / 'solution-preamble.tex').exists() and (path.parent / 'assignment-preamble.tex').exists():
+    preamble = 'solution-preamble.tex' if solution else 'assignment-preamble.tex'
+    subprocess.run(['ln', '-sf', preamble, 'preamble.tex'], cwd=path.parent)
   output=subprocess.run(['latexmk', path.name, '-auxdir=aux'], cwd=path.parent)
+
   if output.returncode: 
     print(f"latexmk failed for {path.name}")
     return None 

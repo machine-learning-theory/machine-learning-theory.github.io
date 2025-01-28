@@ -146,8 +146,8 @@ activities = [
 homeworks = {
   0: [homework('vector-spaces', 'Vector Spaces',                   due=datetime(2025, 1, 30))],
   1: [homework('inner-product-spaces', 'Inner Product Spaces',     due=datetime(2025, 1, 30))],
-  #2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 6)),
-  #    homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 6))],
+  2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 6)),
+      homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 6))],
 }
     
 def censor(day, activity):

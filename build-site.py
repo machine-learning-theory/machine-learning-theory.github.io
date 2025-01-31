@@ -63,10 +63,10 @@ def lab(name, title, warmup=None, followup=None, displaytype='Lab'):
                            '--output',  the_output_path.resolve().with_suffix(''), 
 		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', remove_tag], cwd=parent)
     elif format == 'html':
-      htmloutput=None and subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--template', 'classic', '--embed-images', nbname, 
+      htmloutput=subprocess.run(['jupyter', 'nbconvert', '--to', 'html', '--execute', '--embed-images', nbname, 
                            '--output',  the_output_path.resolve().with_suffix(''), 
                            '--Highlight2HTML.extra_formatter_options', 'linenos=table',
-		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', remove_tag], cwd=parent)
+		                       '--TagRemovePreprocessor.enabled=True', '--TagRemovePreprocessor.remove_cell_tags', remove_tag], cwd=parent) 
   
   if not exists_newer(output_path, parent / nbname): 
     print(f"rendering {nbname}")

@@ -1,8 +1,14 @@
 <tr>
   <td>{{date}}</td>
   <td>{{displaytype}}</td>
-  <td>{{title}} </td>
-  <td> {{> notebook }} {{> solution-notebook }} </td>
+  <td>
+  {{#if notebook}}
+    <a href="{{notebook}}">{{title}}</a> 
+  {{else}}
+    {{title}}
+  {{/if}}
+  </td>
+  <td> {{> solution-notebook }} </td>
 </tr>
 
 {{#if warmup}}

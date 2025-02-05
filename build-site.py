@@ -118,8 +118,8 @@ activities = [
   lab('bounded-variation',     'Implementing Bounded Variation Regression'),
   lab('convergence-rates',     'Rates of Convergence'),
   lecture('r-learner',         'Treatment Effects and the R-Learner'),
-  lab('r-learner-parametric',    'The Parametric R-Learner'),
-  lab('r-learner-nonparametric', 'The Nonparametric R-Learner'), 
+  lab('rlearner',    'The Parametric R-Learner'),
+  lab('rlearner', 'The Nonparametric R-Learner'), 
   review(), 
   
   lecture('sobolev-regression', 'Sobolev Regression (1/2)'),

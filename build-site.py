@@ -122,26 +122,32 @@ activities = [
   lab('rlearner', 'The Nonparametric R-Learner'), 
   review(), 
   
-  lecture('sobolev-regression', 'Sobolev Regression (1/2)'),
-  lecture('sobolev-regression', 'Sobolev Regression (2/2)'),
+  lecture('sobolev-regression', 'Sobolev Regression'),
   lab('sobolev-regression', 'Implementing Sobolev Regression'),
-  review(), 
-  
   lecture('multivariate-sobolev', 'Multivariate Sobolev Regression'),
   lab('image-denoising',          'Image Denoising'),
-  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (1/2)'),
-  lecture('least-squares-finite-models', 'Least Squares in Finite Models, i.e. Model Selection (2/2)'),
+   
+  # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 
+  lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (1/2)'),
+  lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (2/2)'),
+
+  
+  # Do Efron-Stein + Width Calculations for HW around here
   lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e. Regression, with Gaussian Noise'),
-  review('+ Misspecification'),
+  lecture('least-squares-misspecification', 'Least Squares with Misspecification'),
+
+  # Do drawing models in 2D (monotone, bv, lipschitz) for hw before this 
   lab('drawing-width',   'Drawing Gaussian Width'),
   lab('computing-width', 'Computing Gaussian Width'),
+  review(),
 
+  # Do Covering Numbers HW around now 
   lecture('covering-numbers', 'Bounding Gaussian Width using Covering Numbers'),
   lecture('chaining',         'Bounding Gaussian Width using Chaining'),
   lecture('curse',            'The Curse of Dimensionality'),
-  review(),
   lecture('non-gaussian',     'Least Squares and non-Gaussian Noise'),
   lecture('sampling',         'Least Squares, Sampling, and Population MSE'),
+  review()
 ]
 homeworks = {
   0: [homework('vector-spaces', 'Vector Spaces',                   due=datetime(2025, 1, 30))],

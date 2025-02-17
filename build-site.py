@@ -106,7 +106,8 @@ startdate = date(2025, 1, 14)
 enddate = date(2025, 4, 25)
 daysoff = { 
   datetime(2025, 3, 11): dayoff('Spring Break'),
-  datetime(2025, 3, 13): dayoff('Spring Break')
+  datetime(2025, 3, 13): dayoff('Spring Break'),
+  datetime(2025, 2, 13): dayoff('Cancelled'),
 }
 
 classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
@@ -120,12 +121,12 @@ activities = [
   lecture('r-learner',         'Treatment Effects and the R-Learner'),
   lab('rlearner',    'The Parametric R-Learner'),
   lab('rlearner', 'The Nonparametric R-Learner'), 
+  
   review(), 
   
   lecture('sobolev-regression', 'Sobolev Regression'),
   lab('sobolev-regression', 'Implementing Sobolev Regression'),
-  lecture('multivariate-sobolev', 'Multivariate Sobolev Regression'),
-  lab('image-denoising',          'Image Denoising'),
+  lecture('multivariate-sobolev', 'Multivariate Sobolev Regression and Image Denoising'),
    
   # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 
   lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (1/2)'),

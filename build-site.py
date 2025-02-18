@@ -43,8 +43,8 @@ def homework(name, title, due):
     
   return assignment
 
-def review(title=""):
-  return {'type': 'review', 'title': title}
+def review(title="", href=None):
+  return {'type': 'review', 'title': title, 'href': href}
 
 
 def lab(name, title, warmup=None, followup=None, displaytype='Lab'):
@@ -122,8 +122,8 @@ activities = [
   lab('rlearner',    'The Parametric R-Learner'),
   lab('rlearner', 'The Nonparametric R-Learner'), 
   
-  review(), 
-  
+  review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
+
   lecture('sobolev-regression', 'Sobolev Regression'),
   lab('sobolev-regression', 'Implementing Sobolev Regression'),
   lecture('multivariate-sobolev', 'Multivariate Sobolev Regression and Image Denoising'),

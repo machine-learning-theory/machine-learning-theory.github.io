@@ -155,6 +155,7 @@ homeworks = {
   1: [homework('inner-product-spaces', 'Inner Product Spaces',     due=datetime(2025, 1, 30))],
   2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 11)),
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
+  5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 2, 27))]
 }
     
 def censor(day, activity):

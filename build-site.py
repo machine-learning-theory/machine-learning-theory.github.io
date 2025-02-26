@@ -123,10 +123,10 @@ activities = [
   lab('rlearner', 'The Nonparametric R-Learner'), 
   
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
+  review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
   lecture('sobolev-regression', 'Sobolev Regression'),
-  lab('sobolev-regression', 'Implementing Sobolev Regression'),
-  lecture('multivariate-sobolev', 'Multivariate Sobolev Regression and Image Denoising'),
+  lab('sobolev-regression', 'Image Denoising using Multivariate Sobolev Regression'),
    
   # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 
   lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (1/2)'),
@@ -157,6 +157,8 @@ homeworks = {
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
   5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 2, 27))]
 }
+# compile supplemental notes 
+homework('gaussian-sobolev-models', 'Gaussian Sobolev Models', due=datetime(2025, 2, 27))
     
 def censor(day, activity):
   endofclass = day.replace(hour=16, minute=15)

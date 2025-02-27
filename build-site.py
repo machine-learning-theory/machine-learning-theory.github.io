@@ -126,7 +126,7 @@ activities = [
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
   lecture('sobolev-regression', 'Sobolev Regression'),
-  lab('sobolev-regression', 'Image Denoising using Multivariate Sobolev Regression'),
+  lab('sobolev-regression', 'Sobolev Regression'),
    
   # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 
   lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (1/2)'),

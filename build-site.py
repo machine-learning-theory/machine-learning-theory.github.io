@@ -113,8 +113,10 @@ daysoff = {
 classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
 activities = [
   lecture('intro', 'Introduction'),
-  lab('monotone', 'Implementing Monotone Regression (1/2)',  warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warm Up')),
-  lab('monotone', 'Implementing Monotone Regression (2/2)',  followup=lab('image-denoising',     'Image Denoising',       displaytype='Follow Up')),
+  lab('monotone', 'Implementing Monotone Regression (1/2)',  
+      warmup=lab('fitting-lines-in-CVXR', 'Fitting Lines in CVXR', displaytype='Warm Up')),
+  lab('monotone', 'Implementing Monotone Regression (2/2)',  
+      followup=lab('image-denoising',     'Image Denoising',       displaytype='Follow Up')),
   lecture('bounded-variation', 'Bounded Variation Regression'),
   lab('bounded-variation',     'Implementing Bounded Variation Regression'),
   lab('convergence-rates',     'Rates of Convergence'),
@@ -126,7 +128,8 @@ activities = [
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
   lecture('sobolev-regression', 'Sobolev Regression'),
-  lab('sobolev-regression', 'Sobolev Regression'),
+  lab('sobolev-regression', 'Sobolev Regression',
+      followup=lab('sobolev-rates', 'Rates of Convergence for Sobolev Regression', displaytype='Follow Up')),
    
   # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 
   lecture('least-squares-finite-models',   'Least Squares in Finite Models, i.e. Model Selection (1/2)'),

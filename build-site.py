@@ -128,7 +128,7 @@ activities = [
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
   lecture('sobolev-regression', 'Sobolev Regression'),
-  lab('sobolev-regression', 'Sobolev Regression',
+  lab('sobolev-regression', 'Implementing Sobolev Regression',
       followup=lab('sobolev-rates', 'Rates of Convergence for Sobolev Regression', displaytype='Follow Up')),
    
   # Do the union bound/gaussian maximal inequality + Chebyshev for HW before this. 

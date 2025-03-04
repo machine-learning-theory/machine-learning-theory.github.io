@@ -29,11 +29,13 @@ def rendered(path, dash_whatever='', solution=False):
     path.with_suffix('.pdf').rename(rendered_path)
     return rendered_path.relative_to('_site')
 
-def lecture(name, title):
-  return {'type': 'lecture',  'title': title, 'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw'))}
+def lecture(name, title, warmup=None, followup=None):
+  return {'type': 'lecture',  'title': title, 
+          'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw')),
+          'warmup': warmup, 'followup': followup }
 
-def homework(name, title, due):
-  assignment = {'type': 'homework', 'title': title, 
+def homework(name, title, due, displaytype='homework'):
+  assignment = {'type': displaytype, 'title': title, 
           'due':  due.strftime("%a, %b %d"),
           'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw')) }
 
@@ -127,7 +129,8 @@ activities = [
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
-  lecture('sobolev-regression', 'Sobolev Regression'),
+  lecture('sobolev-regression', 'Sobolev Regression',
+      followup=homework('gaussian-sobolev-models', 'Gaussian Sobolev Models and Polynomial Approximation', due=None, displaytype='Follow Up')),
   lab('sobolev-regression', 'Implementing Sobolev Regression',
       followup=lab('sobolev-rates', 'Rates of Convergence for Sobolev Regression', displaytype='Follow Up')),
    
@@ -160,8 +163,6 @@ homeworks = {
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
   5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 2, 27))]
 }
-# compile supplemental notes 
-homework('gaussian-sobolev-models', 'Gaussian Sobolev Models', due=datetime(2025, 2, 27))
     
 def censor(day, activity):
   endofclass = day.replace(hour=16, minute=15)

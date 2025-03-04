@@ -1,6 +1,12 @@
 <tr>
-  <td>Homework</td>
-  <td></td>
+  {{#if displaytype}}
+    <td></td>
+    <td>{{displaytype}}</td>
+  {{else}}
+   <td>Homework</td>
+   <td></td>
+  {{/if}}
+  
   {{#if href}}
     <td><a href="{{href}}">{{title}}</a></td>
   {{else}}

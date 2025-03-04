@@ -34,10 +34,12 @@ def lecture(name, title, warmup=None, followup=None):
           'href': rendered(Path('machine-learning-theory') / 'lectures' / (name + '-lecture.Rnw')),
           'warmup': warmup, 'followup': followup }
 
-def homework(name, title, due, displaytype='homework'):
-  assignment = {'type': displaytype, 'title': title, 
-          'due':  due.strftime("%a, %b %d"),
-          'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw')) }
+def homework(name, title, due, displaytype=None):
+  assignment = {'type': 'homework', 
+                'title': title, 
+                'displaytype': displaytype,
+                'due':  due.strftime("%a, %b %d"),
+                'href': rendered(Path('machine-learning-theory') / 'homework' / (name + '-homework.Rnw')) }
 
   duetime = due.replace(hour=23, minute=59)
   if datetime.now() > duetime:
@@ -92,7 +94,7 @@ def dayoff(title):
 
 # Describe the Syllabus
 
-from datetime import date, datetime
+from datetime import date, time, datetime
 from dateutil.rrule import rrule, WEEKLY, SU, TU, TH
 from dateutil.relativedelta import relativedelta
 
@@ -130,7 +132,8 @@ activities = [
   review('Smooth and Shape-Constrained Regression', href=lab('first-review', 'Not Used')['notebook']),
 
   lecture('sobolev-regression', 'Sobolev Regression',
-      followup=homework('gaussian-sobolev-models', 'Gaussian Sobolev Models and Polynomial Approximation', due=None, displaytype='Follow Up')),
+      followup=homework('gaussian-sobolev-models', 'Gaussian Sobolev Models and Polynomial Approximation (Follow Up Activity)', 
+                        due=datetime.combine(startdate, time(0, 0)), displaytype='Follow Up')),
   lab('sobolev-regression', 'Implementing Sobolev Regression',
       followup=lab('sobolev-rates', 'Rates of Convergence for Sobolev Regression', displaytype='Follow Up')),
    

@@ -1,6 +1,12 @@
 <tr>
-  <td>{{date}}</td>
-  <td>Lecture</td>
+  {{#if displaytype}}
+   <td></td>
+   <td>{{displaytype}}</td>
+  {{else}}
+    <td>{{date}}</td>
+    <td>Lecture</td>
+  {{/if}}
+
   {{#if href}}
   <td><a href="{{href}}">{{title}}</a></td>
   {{else}}
@@ -8,11 +14,3 @@
   {{/if}}
   <td/>
 </tr>
-
-{{#if warmup}}
- {{> (lookup . 'type') warmup }}
-{{/if}}
-
-{{#if followup}}
- {{> (lookup . 'type') followup }}
-{{/if}}

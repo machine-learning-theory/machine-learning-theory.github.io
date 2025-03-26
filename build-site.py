@@ -146,9 +146,9 @@ activities = [
 
   lecture('least-squares-infinite-models', 'Least Squares in Infinite Models, i.e. Regression, with Gaussian Noise'),
   lab('drawing-width',   'Drawing Gaussian Width'),
+  lab('computing-width',   'Computing Gaussian Width'),
 
   lecture('least-squares-misspecification', 'Loose Ends: Misspecification and the Efron-Stein Inequality'),
-  lab('computing-width', 'Computing Gaussian Width'),
   review('Least Squares and Gaussian Width'),
   lecture('curse', 'The Curse of Dimensionality'),
 

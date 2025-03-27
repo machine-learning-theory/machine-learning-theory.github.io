@@ -148,14 +148,14 @@ activities = [
   lab('drawing-width',   'Drawing Gaussian Width'),
   lab('computing-width',   'Computing Gaussian Width'),
 
-  lecture('least-squares-misspecification', 'Loose Ends: Misspecification and the Efron-Stein Inequality'),
+  lecture('least-squares-and-efron-stein', 'Least Squares and the Efron-Stein Inequality'),
+  lecture('least-squares-misspecified', 'Least Squares with Misspecification'),
   review('Least Squares and Gaussian Width'),
   lecture('curse', 'The Curse of Dimensionality'),
 
   # Do Covering Numbers HW around now 
   lecture('covering-numbers', 'Bounding Gaussian Width using Covering Numbers'),
   lecture('chaining',         'Bounding Gaussian Width using Chaining'),
-  lecture('non-gaussian',     'Least Squares and non-Gaussian Noise'),
   lecture('sampling',         'Least Squares, Sampling, and Population MSE'),
   review()
 ]
@@ -165,7 +165,7 @@ homeworks = {
   2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 11)),
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
   5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 3, 4))],
-  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 3, 31))]
+  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 4, 2))]
 }
     
 def censor(day, activity):

@@ -149,7 +149,7 @@ activities = [
   lab('computing-width',   'Computing Gaussian Width'),
 
   lecture('least-squares-and-efron-stein', 'Least Squares and the Efron-Stein Inequality'),
-  lecture('least-squares-misspecified', 'Least Squares with Misspecification'),
+  lecture('least-squares-misspecified', 'Least Squares with Misspecification and Non-Gaussian Noise'),
   review('Least Squares and Gaussian Width'),
   lecture('curse', 'The Curse of Dimensionality'),
 

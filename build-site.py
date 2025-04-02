@@ -165,7 +165,8 @@ homeworks = {
   2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 11)),
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
   5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 3, 4))],
-  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 4, 7))]
+  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 4, 7))],
+  12: [homework('covering-numbers', 'Covering Numbers (Optional)', due=datetime(2025, 4, 21))]
 }
     
 def censor(day, activity):

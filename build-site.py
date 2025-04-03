@@ -149,8 +149,8 @@ activities = [
   lab('computing-width',   'Computing Gaussian Width'),
 
   lecture('least-squares-and-efron-stein', 'Least Squares and the Efron-Stein Inequality'),
-  lecture('least-squares-misspecified', 'Sampling, Misspecification, and Non-Gaussian Noise (1/2)'),
-  lecture('least-squares-misspecified', 'Sampling, Misspecification, and Non-Gaussian Noise (2/2)'),
+  lecture('sampling-misspecification-nongaussian', 'Sampling, Misspecification, and Non-Gaussian Noise (1/2)'),
+  lecture('sampling-misspecification-nongaussian', 'Sampling, Misspecification, and Non-Gaussian Noise (2/2)'),
   review('Least Squares and Gaussian Width'),
   lecture('curse', 'The Curse of Dimensionality'),
 

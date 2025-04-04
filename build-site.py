@@ -114,6 +114,7 @@ daysoff = {
   datetime(2025, 3, 11): dayoff('Spring Break'),
   datetime(2025, 3, 13): dayoff('Spring Break'),
   datetime(2025, 2, 13): dayoff('Cancelled'),
+  datetime(2025, 4,  3): dayoff('Some Dooley Week Thing?'),
 }
 
 classdays = [day for day in rrule(WEEKLY, dtstart=startdate, until=enddate, byweekday=(TU, TH)) if day not in daysoff]
@@ -165,7 +166,7 @@ homeworks = {
   2: [homework('smooth-regression', 'Option 1. Smooth Regression', due=datetime(2025, 2, 11)),
       homework('convex-regression', 'Option 2. Convex Regression', due=datetime(2025, 2, 11))],
   5: [homework('sobolev-models', 'Sobolev Models and Finite-Dimensional Approximation', due=datetime(2025, 3, 4))],
-  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 4, 7))],
+  9: [homework('gaussian-width', 'Least Squares and Gaussian Width', due=datetime(2025, 4, 9))],
   12: [homework('covering-numbers', 'Covering Numbers (Optional)', due=datetime(2025, 4, 21))]
 }
     

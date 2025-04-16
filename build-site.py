@@ -153,7 +153,7 @@ activities = [
   lecture('least-squares-and-efron-stein', 'Least Squares and the Efron-Stein Inequality'),
   lecture('misspecification', 'Misspecification'),
   lecture('sampling-and-nongaussian-noise', 'Sampling and Non-Gaussian Noise'),
-  review('Least Squares and Gaussian Width'),
+  review('Least Squares and Gaussian Width', href=(ASSETS_PATH / 'labs' / 'least-squares-review.html').relative_to('_site')),
   lecture('curse', 'The Curse of Dimensionality'),
 
   # Do Covering Numbers HW around now 
